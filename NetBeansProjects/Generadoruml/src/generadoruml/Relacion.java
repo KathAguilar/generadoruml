@@ -1,13 +1,25 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package generadoruml;
 
-/**
- *
- * @author kathe
- */
 public class Relacion {
-    
+    private String origen;
+    private String destino;
+    private String tipo;
+
+
+public Relacion (String origen, String destino, String tipo){
+    this.origen = origen;
+    this.destino = destino;
+    this.tipo = tipo;
+}
+ public String gettipo(){
+     return tipo;
+ }
+ public String getorigen(){
+     return origen;
+ }
+ public String gettdestino(){
+     return destino;
+ }
+
 }
