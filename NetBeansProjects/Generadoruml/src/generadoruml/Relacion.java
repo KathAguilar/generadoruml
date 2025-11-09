@@ -12,10 +12,10 @@ public Relacion (String origen, String destino, String tipo){
     this.destino = destino;
     this.tipo = tipo;
 }
- public String gettipo(){
+ public String getTipo(){
      return tipo;
  }
- public String getorigen(){
+ public String getOrigen(){
      return origen;
  }
  public String gettdestino(){
