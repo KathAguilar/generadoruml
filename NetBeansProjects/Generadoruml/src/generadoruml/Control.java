@@ -32,10 +32,7 @@ public class Control {
     organizador = new OrganizadorArchivo();
     interfaceIO.mostrar("Bienvenido al generador de archivos UML / Código Java");
     }
-private void elegirOpcion(){
-    
-    
-}
+
 
 private void capturarDatos(){
     
