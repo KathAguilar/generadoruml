@@ -35,7 +35,8 @@ public class Control {
 
 
 private void capturarDatos(){
-    
+
+  
     
 }
     
