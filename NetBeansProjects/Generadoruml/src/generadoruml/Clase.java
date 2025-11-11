@@ -7,12 +7,15 @@ private String nombre;
 private final String visibilidad;
 private final List<Atributo> atributos; 
 private final List<Metodo> metodos;
+
+
     public Clase(String nombre, String visibilidad) {
         this.nombre = nombre;
         this.atributos = new ArrayList<>();
         this.metodos =new ArrayList<>();
         this.visibilidad = visibilidad;
-     }
+       
+    }
     public void agregarAtributo(Atributo atributo){
         atributos.add(atributo);
     }
@@ -34,4 +37,4 @@ private final List<Metodo> metodos;
     public String getVisibilidad(){
         return visibilidad;
     }   
- }
+}

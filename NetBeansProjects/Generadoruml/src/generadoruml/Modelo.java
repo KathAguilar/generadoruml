@@ -11,10 +11,10 @@ public Modelo(){
     this.relaciones = new ArrayList<>();
     
 }
-public void crearclase(Clase clase){
+public void crearClase(Clase clase){
     clases.add(clase);
 }
-public void crearrelacion (Relacion relacion){
+public void crearRelacion (Relacion relacion){
   relaciones.add(relacion);
 }
     public List<Clase> getClases() {

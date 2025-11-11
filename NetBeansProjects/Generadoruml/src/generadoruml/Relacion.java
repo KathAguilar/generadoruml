@@ -1,25 +1,41 @@
 
 package generadoruml;
 
-public class Relacion {
-    private String origen;
-    private String destino;
-    private String tipo;
+public class GeneradorUML {
 
+    public void organizarUML(Modelo modelo) {
+        OrganizadorArchivo archivo = new OrganizadorArchivo();
+        archivo.crearArchivo("uml");
+        String uml = "@startuml\n";
+        
 
-public Relacion (String origen, String destino, String tipo){
-    this.origen = origen;
-    this.destino = destino;
-    this.tipo = tipo;
-}
- public String getTipo(){
-     return tipo;
- }
- public String getOrigen(){
-     return origen;
- }
- public String gettdestino(){
-     return destino;
- }
+        for (Clase c : modelo.getClases()) {
+            uml += "class " + c.getNombre() + " {\n";
+            for (Atributo a : c.getAtributos()) {
+                uml += " " + a.getVisibilidad() + " " + a.getNombre() + " : " + a.getTipo() + "\n";
+            }
+            for (Metodo m : c.getMetodos()) {
+                uml += " " + m.getVisibilidad() + " " + m.getNombre() + "() : " + m.getTipo() + "\n";
+            }
+            uml += "}\n\n";
+        }
 
+        for (Relacion r : modelo.getRelaciones()) {
+            String flecha = "-->";
+            if (r.getTipo().equalsIgnoreCase("herencia")) {
+                flecha = "<|--";
+            } else if (r.getTipo().equalsIgnoreCase("asociacion")) {
+                flecha = "--";
+            } else if (r.getTipo().equalsIgnoreCase("dependencia")) {
+                flecha = "..>";
+            } else if (r.getTipo().equalsIgnoreCase("implementacion")) {
+                flecha = "<|..";
+            }
+            uml += r.getOrigen() + " " + flecha + " " + r.getDestino() + " : " + r.getTipo() + "\n";
+        }
+
+        uml += "@enduml";
+        archivo.guardarArchivo("uml.txt", uml);
+        System.out.println("UML.txt generado correctamente.");
+    }
 }

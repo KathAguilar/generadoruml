@@ -3,19 +3,19 @@
 
         class Metodo {
             private final String nombre;
-            private final String tipodato;
+            private final String tipo;
             private final String visibilidad;
 
-        public Metodo(String nombre, String tipodato, String visibilidad){
+        public Metodo(String nombre, String tipo, String visibilidad){
             this.nombre = nombre; 
-            this.tipodato = tipodato;
+            this.tipo = tipo;
             this.visibilidad = visibilidad;
         }
         public String getNombre() {
             return nombre;
         }
-        public String getTipoDato() {
-            return tipodato;
+        public String getTipo() {
+            return tipo;
         }
         public String getVisibilidad(){
             return visibilidad;
