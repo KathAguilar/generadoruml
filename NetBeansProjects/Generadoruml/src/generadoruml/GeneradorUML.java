@@ -2,50 +2,47 @@ package generadoruml;
 
 public class GeneradorUML {
 
-    public String organizarUML(Modelo modelo) {
-        String uml = "@startuml\n";
-        
+    public String hacerUML(Modelo modelo) {
+        String texto = "@startuml\n"; 
+
+        // recorre toooodas las clases
         for (Clase c : modelo.getClases()) {
-            uml += "class " + c.getNombre() + " {\n";
+            texto = texto + "class " + c.getNombre() + " {\n";
+
+         
             for (Atributo a : c.getAtributos()) {
-                uml += " " + simbolo(a.getVisibilidad()) + " " + a.getNombre() + " : " + a.getTipo() + "\n";
+                texto = texto + " " + vis(a.getVisibilidad()) + " " + a.getNombre() + " : " + a.getTipo() + "\n";
             }
+
             for (Metodo m : c.getMetodos()) {
-                uml += " " + simbolo(m.getVisibilidad()) + " " + m.getNombre() + "() : " + m.getTipo() + "\n";
+                texto = texto + " " + vis(m.getVisibilidad()) + " " + m.getNombre() + "() : " + m.getTipo() + "\n";
             }
-            uml += "}\n";
+            texto = texto + "}\n"; 
         }
-
         for (Relacion r : modelo.getRelaciones()) {
-            String flecha = "..>"; 
-            
-            if (r.getTipo().equalsIgnoreCase("es un")) {
-                flecha = "<|--"; 
-            } else if (r.getTipo().equalsIgnoreCase("posee")) {
-                flecha = "--"; 
-            } else if (r.getTipo().equalsIgnoreCase("usa")) {
-                flecha = "..>"; 
-            }
+            String f = "..>"; // usa por defecto 
+            if (r.getTipo().equalsIgnoreCase("es un")) f = "<|--";
+            if (r.getTipo().equalsIgnoreCase("posee")) f = "--";
+            if (r.getTipo().equalsIgnoreCase("usa")) f = "..>";
 
-            uml += r.getOrigen() + " " + flecha + " " + r.getDestino() + " : " + r.getTipo() + "\n";
+            texto = texto + r.getOrigen() + " " + f + " " + r.getDestino() + " : " + r.getTipo() + "\n";
         }
 
-        uml += "@enduml";
-        return uml;
+        texto = texto + "@enduml"; 
+        return texto;
     }
+    private String vis(String v) {
+        if (v == null) return "+";
 
-    private String simbolo(String visibilidad) { //traduce visibilidad
-        if (visibilidad == null) {
-            return "+";
-        }
-        switch(visibilidad.toLowerCase()) {
-            case "privado": case "private":
+      switch(v.toLowerCase()) {
+            case "privado":
                 return "-";
-            case "protegido": case "protected":
+            case "protegido":
                 return "#";
-            case "publico": case "público": case "public":
+            case "publico": 
                 return "+";
-        }
-    
+            default:
+                return "+";
+    }
     }
 }
