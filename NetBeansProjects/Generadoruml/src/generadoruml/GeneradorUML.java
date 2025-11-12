@@ -1,5 +1,5 @@
 package generadoruml;
-
+//
 public class GeneradorUML {
     public String organizarUML(Modelo modelo) {
         String texto = "@startuml\n";

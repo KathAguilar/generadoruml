@@ -1,6 +1,6 @@
 
 package generadoruml;
-
+ 
 public class Atributo {
     private String nombre;
     private String tipo;

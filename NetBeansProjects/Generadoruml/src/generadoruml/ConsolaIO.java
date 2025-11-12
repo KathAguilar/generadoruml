@@ -1,7 +1,7 @@
 
 package generadoruml;
 import java.util.Scanner;
-
+//
 public class ConsolaIO implements InterfaceIO{
     private Scanner scanner = new Scanner(System.in); //declaracioon
     @Override
