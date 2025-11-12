@@ -1,41 +1,51 @@
-
 package generadoruml;
 
 public class GeneradorUML {
 
-    public void organizarUML(Modelo modelo) {
-        OrganizadorArchivo archivo = new OrganizadorArchivo();
-        archivo.crearArchivo("uml");
+    public String organizarUML(Modelo modelo) {
         String uml = "@startuml\n";
         
-
         for (Clase c : modelo.getClases()) {
             uml += "class " + c.getNombre() + " {\n";
             for (Atributo a : c.getAtributos()) {
-                uml += " " + a.getVisibilidad() + " " + a.getNombre() + " : " + a.getTipo() + "\n";
+                uml += " " + simbolo(a.getVisibilidad()) + " " + a.getNombre() + " : " + a.getTipo() + "\n";
             }
             for (Metodo m : c.getMetodos()) {
-                uml += " " + m.getVisibilidad() + " " + m.getNombre() + "() : " + m.getTipo() + "\n";
+                uml += " " + simbolo(m.getVisibilidad()) + " " + m.getNombre() + "() : " + m.getTipo() + "\n";
             }
-            uml += "}\n\n";
+            uml += "}\n";
         }
 
         for (Relacion r : modelo.getRelaciones()) {
-            String flecha = "-->";
-            if (r.getTipo().equalsIgnoreCase("herencia")) {
-                flecha = "<|--";
-            } else if (r.getTipo().equalsIgnoreCase("asociacion")) {
-                flecha = "--";
-            } else if (r.getTipo().equalsIgnoreCase("dependencia")) {
-                flecha = "..>";
-            } else if (r.getTipo().equalsIgnoreCase("implementacion")) {
-                flecha = "<|..";
+            String flecha = "..>"; 
+            
+            if (r.getTipo().equalsIgnoreCase("es un")) {
+                flecha = "<|--"; 
+            } else if (r.getTipo().equalsIgnoreCase("posee")) {
+                flecha = "--"; 
+            } else if (r.getTipo().equalsIgnoreCase("usa")) {
+                flecha = "..>"; 
             }
+
             uml += r.getOrigen() + " " + flecha + " " + r.getDestino() + " : " + r.getTipo() + "\n";
         }
 
         uml += "@enduml";
-        archivo.guardarArchivo("uml.txt", uml);
-        System.out.println("UML.txt generado correctamente.");
+        return uml;
+    }
+
+    private String simbolo(String visibilidad) { //traduce visibilidad
+        if (visibilidad == null) {
+            return "+";
+        }
+        switch(visibilidad.toLowerCase()) {
+            case "privado": case "private":
+                return "-";
+            case "protegido": case "protected":
+                return "#";
+            case "publico": case "público": case "public":
+                return "+";
+        }
+    
     }
 }
