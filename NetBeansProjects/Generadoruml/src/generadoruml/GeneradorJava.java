@@ -7,18 +7,18 @@ public class GeneradorJava {
         String codigo = "";
 
         for (Clase c : modelo.getClases()) {
-            codigo += "public class " + c.getNombre() + " {\n\n";
+            codigo += "public class " + c.getNombre() + " {\n";
 
             for (Atributo a : c.getAtributos()) {
                 codigo += "    " + visibilidad(a.getVisibilidad()) + " "
                         + a.getTipo() + " " + a.getNombre() + ";\n";
             }
 
-            codigo += "\n    public " + c.getNombre() + "() {\n    }\n\n";
+            codigo += "\n    public " + c.getNombre() + "() {\n    }\n";
 
             for (Metodo m : c.getMetodos()) {
                 codigo += "    " + visibilidad(m.getVisibilidad()) + " "
-                        + m.getTipo() + " " + m.getNombre() + "() {\n    }\n\n";
+                        + m.getTipo() + " " + m.getNombre() + "() {\n    }\n";
             }
 
             codigo += "}";
