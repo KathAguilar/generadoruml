@@ -1,0 +1,8 @@
+=== Diagrama UML ===
+
+Clase: hola
+Atributos:
+ - publico i ojo
+ - ok int o
+
+

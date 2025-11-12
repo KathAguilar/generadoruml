@@ -1,13 +1,10 @@
 package generadoruml;
+
 import java.util.Scanner;
 
 public class Control {
-  
-    private Logica logica;
     private InterfaceIO interfaceIO;
     private OrganizadorArchivo organizador;
-    private GeneradorJava java;
-    private GeneradorUML uml;
     private Modelo modelo;
     private String rutaArchivo;
 
@@ -16,10 +13,10 @@ public class Control {
         System.out.println("Seleccione el tipo de interfaz a utilizar:");
         System.out.println("1. App");
         System.out.println("2. Consola");
-        System.out.print("Opción: ");
+        System.out.println("escoger: ");
 
         int opcion = sc.nextInt();
-        sc.nextLine(); // limpiar el buffer
+        sc.nextLine();
 
         if (opcion == 1) {
             interfaceIO = new PopUpIO();
@@ -28,87 +25,218 @@ public class Control {
             interfaceIO = new ConsolaIO();
             interfaceIO.mostrar("Usted ha seleccionado Consola");
         }
-        
+
         organizador = new OrganizadorArchivo();
-        java = new GeneradorJava();
-        uml = new GeneradorUML();
-        modelo = new Modelo(); // inicializa modeloooo
-        logica = new Logica(); // y logicaaa
+        modelo = new Modelo();
 
         interfaceIO.mostrar("Bienvenido al generador de archivos UML / Código Java");
-        elegirOpcion();
+        menuPrincipal();
     }
 
-    private void elegirOpcion() {
+    private void menuPrincipal() {
         boolean continuar = true;
 
         while (continuar) {
-            interfaceIO.mostrar("=== MENÚ PRINCIPAL ===\n" +
-                               "1. Generar archivo UML\n" +
-                               "2. Generar código fuente Java\n" +
-                               "3. Salir");
+            String opcion = interfaceIO.leer("=== Opciones ===" +
+                                "\n1. escribir clases" +
+                                "\n2. escribir relaciones" +
+                                "\n3. generar UML" +
+                                "\n4. generar Java" +
+                                "\n5. Salir" +
+                                "\n\nEscribe el número de opción:");
 
-            String opcion = interfaceIO.leer("Seleccione una opción (1-3):");
+            if (opcion.equals("1")) {
+                capturarClases();
+            } else if (opcion.equals("2")) {
+                capturarRelaciones();
+            } else if (opcion.equals("3")) {
+                generarUML();
+            } else if (opcion.equals("4")) {
+                generarJava();
+            } else if (opcion.equals("5")) {
+                continuar = false;
+            } else {
+                interfaceIO.mostrar("Opción no válida");
+            }
+        }
+    }
 
-            switch (opcion) {
-                case "1" -> {
-                    interfaceIO.mostrar("Ha seleccionado la opción: Generar archivo UML");
-                    generarUML();
-                    confirmarResultado();
+    private void capturarClases() {
+        boolean seguir = true;
+
+        while (seguir) {
+            String nombre = interfaceIO.leer("Ingrese el nombre de la clase:");
+            Clase c = new Clase(nombre, "publico");
+
+            boolean atributosListos = false;
+            while (!atributosListos) {
+                String nombreA = interfaceIO.leer("Nombre del atributo (o vacio para terminar):");
+                if (nombreA.isEmpty()) {
+                    atributosListos = true;
+                } else {
+                    String tipoA = seleccionarTipo();
+                    String visA = seleccionarVisibilidad();
+                    c.agregarAtributo(new Atributo(nombreA, tipoA, visA));
                 }
-                case "2" -> {
-                    interfaceIO.mostrar("Ha seleccionado la opción: Generar código fuente Java");
-                    generarJava();
-                    confirmarResultado();
+            }
+
+            boolean metodosListos = false;
+            while (!metodosListos) {
+                String nombreM = interfaceIO.leer("Nombre del método (o vacio para terminar):");
+                if (nombreM.isEmpty()) {
+                    metodosListos = true;
+                } else {
+                    String tipoM = seleccionarTipo();
+                    String visM = seleccionarVisibilidad();
+                    c.agregarMetodo(new Metodo(nombreM, tipoM, visM));
                 }
-                case "3" -> {
-                    interfaceIO.mostrar("Saliendo del programa...");
-                    continuar = false;
+            }
+
+            modelo.crearClase(c);
+
+            String otra = interfaceIO.leer("¿Desea capturar otra clase? (s/n):");
+            if (!otra.equalsIgnoreCase("s")) {
+                seguir = false;
+            }
+        }
+    }
+
+    private void capturarRelaciones() {
+        if (modelo.getClases().size() < 2) {
+            interfaceIO.mostrar("Necesitas al menos dos clases para crear una relación.");
+            return;
+        }
+
+        boolean seguir = true;
+        while (seguir) {
+            String lista = "";
+            int i = 1;
+            for (Clase c : modelo.getClases()) {
+                lista += "\n" + i + ". " + c.getNombre();
+                i++;
+            }
+            String opOrigen = interfaceIO.leer("Seleccione la clase ORIGEN:" + lista);
+            String opDestino = interfaceIO.leer("Seleccione la clase DESTINO:" + lista);
+
+            if ((opOrigen.equals("1") || opOrigen.equals("2") || opOrigen.equals("3")) &&
+                (opDestino.equals("1") || opDestino.equals("2") || opDestino.equals("3")) &&
+                !opDestino.equals(opOrigen)) {
+                String tipo = "";
+                while (true) {
+                    tipo = interfaceIO.leer("Seleccione tipo de relación:" +
+                                            "\n1. es un" +
+                                            "\n2. posee" +
+                                            "\n3. usa" +
+                                            "\n\nEscribe el número de opción:");
+                    if (tipo.equals("1") || tipo.equals("2") || tipo.equals("3")) {
+                        break;
+                    } else {
+                        interfaceIO.mostrar("Opción inválida. Intente de nuevo.");
+                    }
                 }
-                default -> interfaceIO.mostrar("Opción no válida. Intente de nuevo.");
+
+                String nombreOrigen = modelo.getClases().get(Integer.parseInt(opOrigen) - 1).getNombre();
+                String nombreDestino = modelo.getClases().get(Integer.parseInt(opDestino) - 1).getNombre();
+                modelo.crearRelacion(new Relacion(nombreOrigen, nombreDestino, tipo));
+
+                String otra = interfaceIO.leer("¿Desea capturar otra relación? (s/n):");
+                if (!otra.equalsIgnoreCase("s")) seguir = false;
+            } else {
+                interfaceIO.mostrar("Opción inválida (No puede ser igual al origen). Intente de nuevo.");
             }
         }
     }
 
     private void generarUML() {
         if (modelo.getClases().isEmpty()) {
-            interfaceIO.mostrar("No hay clases en el modelo. Capture los datos primero.");
+            interfaceIO.mostrar("No hay clases capturadas");
             return;
         }
-        String contenido = logica.generarUML(modelo);
-        String nombreArchivo = interfaceIO.leer("Ingrese el nombre del archivo UML (sin extensión):");
-        rutaArchivo = nombreArchivo + ".txt";
+        GeneradorUML generadorUML = new GeneradorUML();
+        String contenido = generadorUML.organizarUML(modelo);
+        interfaceIO.mostrar("Contenido UML generado:\n" + contenido);
+        String nombreArchivo = interfaceIO.leer("Nombre del archivo UML (sin extensión):");
+        rutaArchivo = nombreArchivo + ".puml";
         boolean exito = organizador.guardarArchivo(rutaArchivo, contenido);
         if (exito) {
-            interfaceIO.mostrar("Archivo UML generado y guardado correctamente en: " + rutaArchivo);
+            interfaceIO.mostrar("Archivo UML guardado en " + rutaArchivo);
         } else {
-            interfaceIO.mostrar("Error al guardar el archivo UML.");
+            interfaceIO.mostrar("Error al guardar UML");
         }
     }
 
     private void generarJava() {
         if (modelo.getClases().isEmpty()) {
-            interfaceIO.mostrar("No hay clases en el modelo. Capture los datos primero.");
+            interfaceIO.mostrar("No hay clases capturadas");
             return;
         }
-        String contenido = logica.generarJava(modelo);
-        String nombreArchivo = interfaceIO.leer("Ingrese el nombre del archivo Java (sin extensión):");
-        rutaArchivo = nombreArchivo + ".txt";
-        boolean exito = organizador.guardarArchivo(rutaArchivo, contenido);
-        if (exito) {
-            interfaceIO.mostrar("Código Java generado y guardado correctamente en: " + rutaArchivo);
-        } else {
-            interfaceIO.mostrar("Error al guardar el archivo Java.");
+        GeneradorJava generadorJava = new GeneradorJava();
+        for (Clase c : modelo.getClases()) {
+            String contenido = generadorJava.organizarJava(c);
+            interfaceIO.mostrar("Contenido Java generado para " + c.getNombre() + ":\n" + contenido);
+            String nombreArchivo = c.getNombre() + ".java";
+            boolean exito = organizador.guardarArchivo(nombreArchivo, contenido);
+            if (exito) {
+                interfaceIO.mostrar("Archivo Java guardado en " + nombreArchivo);
+            } else {
+                interfaceIO.mostrar("Error al guardar Java");
+            }
         }
     }
 
-    // Este método confirma si el archivo se guardó correctamente en disco
-    public void confirmarResultado() {
-        boolean existe = organizador.verificarArchivo(rutaArchivo);
-        if (existe) {
-            interfaceIO.mostrar("el archivo existe en disco y se guardó correctamente.");
-        } else {
-            interfaceIO.mostrar("Error: el archivo no se encontró en el sistema.");
+    private String seleccionarTipo() {
+        String tipo = "";
+        while (true) {
+            String opcion = interfaceIO.leer("Seleccione tipo:" +
+                                "\n1. String" +
+                                "\n2. boolean" +
+                                "\n3. void" +
+                                "\n4. int" +
+                                "\n5. double" +
+                                "\n\nEscribe el número de opción:");
+            if (opcion.equals("1")) {
+                tipo = "String";
+                break;
+            } else if (opcion.equals("2")) {
+                tipo = "boolean";
+                break;
+            } else if (opcion.equals("3")) {
+                tipo = "void";
+                break;
+            } else if (opcion.equals("4")) {
+                tipo = "int";
+                break;
+            } else if (opcion.equals("5")) {
+                tipo = "double";
+                break;
+            } else {
+                interfaceIO.mostrar("Opción inválida. Intente de nuevo.");
+            }
         }
+        return tipo;
+    }
+
+    private String seleccionarVisibilidad() {
+        String vis = "";
+        while (true) {
+            String opcion = interfaceIO.leer("Seleccione visibilidad:" +
+                                "\n1. publico" +
+                                "\n2. privado" +
+                                "\n3. protegido" +
+                                "\n\nEscribe el número de opción:");
+            if (opcion.equals("1")) {
+                vis = "publico";
+                break;
+            } else if (opcion.equals("2")) {
+                vis = "privado";
+                break;
+            } else if (opcion.equals("3")) {
+                vis = "protegido";
+                break;
+            } else {
+                interfaceIO.mostrar("Opción inválida. Intente de nuevo.");
+            }
+        }
+        return vis;
     }
 }

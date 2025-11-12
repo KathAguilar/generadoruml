@@ -1,0 +1,43 @@
+@startuml
+class una {
+ + una1 : double
+ + hola2 : int
+ - hello2() : String
+}
+class chao {
+ - chao1 : String
+ # chao2 : String
+ - double : int
+ + chao8 : boolean
+ + holap() : boolean
+ + holapppppp() : double
+ - hola hola() : boolean
+}
+una ..> chao : e
+una ..> chao : es un 
+@enduml
+@startuml
+class hola {
+ - ho : String
+ - h : void
+ - huj() : void
+}
+class holi {
+ # hu : int
+ # hujy : double
+}
+hola <|-- holi : es un
+@enduml
+@startuml
+class hol {
+ - uj : String
+ - dj : String
+}
+class uj {
+ + sj : boolean
+ - hd : int
+ # ij : double
+}
+class  {
+}
+@enduml

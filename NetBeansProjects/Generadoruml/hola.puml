@@ -1,0 +1,26 @@
+@startuml
+class hola {
+ + ol : String
+ # hola : boolean
+ + o() : int
+}
+class hola {
+ + hu : int
+ + hello : boolean
+ - hola : String
+}
+h ..> class : es un 
+@enduml
+@startuml
+class ui {
+ # ou : int
+ + oi : double
+ # oi : boolean
+ - oj : String
+ - oi : double
+}
+class oi {
+ + oi : void
+ - ohil : String
+}
+@enduml

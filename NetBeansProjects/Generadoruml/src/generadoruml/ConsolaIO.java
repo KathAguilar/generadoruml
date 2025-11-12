@@ -11,7 +11,7 @@ public class ConsolaIO implements InterfaceIO{
     }
     @Override
     public void mostrar(String mensaje) {
-        System.out.println();
+        System.out.println(mensaje);
     
     }
 }

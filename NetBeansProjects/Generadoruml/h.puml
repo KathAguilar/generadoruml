@@ -1,0 +1,8 @@
+@startuml
+class class {
+ + o : String
+ # o : boolean
+ + 3() : String
+ # hello() : double
+}
+@enduml
