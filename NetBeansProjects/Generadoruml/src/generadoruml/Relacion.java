@@ -35,3 +35,8 @@ public class Relacion {
         this.tipo = tipo;
     }
 }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
+}
