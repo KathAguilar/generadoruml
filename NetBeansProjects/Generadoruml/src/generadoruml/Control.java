@@ -166,23 +166,37 @@ public class Control {
     }
 
     private void generarJava() {
-        if (modelo.getClases().isEmpty()) {
-            interfaceIO.mostrar("No hay clases capturadas");
-            return;
-        }
-        GeneradorJava generadorJava = new GeneradorJava();
-        for (Clase c : modelo.getClases()) {
-            String contenido = generadorJava.organizarJava(c);
-            interfaceIO.mostrar("Contenido Java generado para " + c.getNombre() + ":\n" + contenido);
-            String nombreArchivo = c.getNombre() + ".java";
-            boolean exito = organizador.guardarArchivo(nombreArchivo, contenido);
-            if (exito) {
-                interfaceIO.mostrar("Archivo Java guardado en " + nombreArchivo);
-            } else {
-                interfaceIO.mostrar("Error al guardar Java");
-            }
+    if (modelo.getClases().isEmpty()) {
+        interfaceIO.mostrar("No hay clases capturadas");
+        return;
+    }
+
+    GeneradorJava generadorJava = new GeneradorJava();
+
+    for (Clase c : modelo.getClases()) {
+        String contenido = generadorJava.organizarJava(c);
+        interfaceIO.mostrar("Contenido Java generado para " + c.getNombre() + ":\n" + contenido);
+        String nombreArchivo = c.getNombre() + ".java";
+        boolean exito = organizador.guardarArchivo(nombreArchivo, contenido);
+        if (exito) {
+            interfaceIO.mostrar("Archivo Java guardado en " + nombreArchivo);
+        } else {
+            interfaceIO.mostrar("Error al guardar Java");
         }
     }
+
+    if (!modelo.getClases().isEmpty()) {
+        Clase primeraClase = modelo.getClases().get(0);
+        String contenidoMain = generadorJava.generarMain(primeraClase);
+        String nombreArchivoMain = "Main.java";
+        boolean exitoMain = organizador.guardarArchivo(nombreArchivoMain, contenidoMain);
+        if (exitoMain) {
+            interfaceIO.mostrar("Archivo Main.java guardado correctamente");
+        } else {
+            interfaceIO.mostrar("Error al guardar Main.java");
+        }
+    }
+}
 
     private String seleccionarTipo() {
         String tipo = "";
@@ -238,8 +252,5 @@ public class Control {
             }
         }
         return vis;
-    }
-}
-
     }
 }
