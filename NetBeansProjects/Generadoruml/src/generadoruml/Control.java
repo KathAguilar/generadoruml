@@ -13,7 +13,7 @@ public class Control {
         System.out.println("Seleccione el tipo de interfaz a utilizar:");
         System.out.println("1. App");
         System.out.println("2. Consola");
-        System.out.println("escoger: ");
+        System.out.print("escoger: ");
 
         int opcion = sc.nextInt();
         sc.nextLine();
@@ -166,37 +166,37 @@ public class Control {
     }
 
     private void generarJava() {
-    if (modelo.getClases().isEmpty()) {
-        interfaceIO.mostrar("No hay clases capturadas");
-        return;
-    }
+        if (modelo.getClases().isEmpty()) {
+            interfaceIO.mostrar("No hay clases capturadas");
+            return;
+        }
 
-    GeneradorJava generadorJava = new GeneradorJava();
+        GeneradorJava generadorJava = new GeneradorJava();
 
-    for (Clase c : modelo.getClases()) {
-        String contenido = generadorJava.organizarJava(c);
-        interfaceIO.mostrar("Contenido Java generado para " + c.getNombre() + ":\n" + contenido);
-        String nombreArchivo = c.getNombre() + ".java";
-        boolean exito = organizador.guardarArchivo(nombreArchivo, contenido);
-        if (exito) {
-            interfaceIO.mostrar("Archivo Java guardado en " + nombreArchivo);
-        } else {
-            interfaceIO.mostrar("Error al guardar Java");
+        for (Clase c : modelo.getClases()) {
+            String contenido = generadorJava.organizarJava(c);
+            interfaceIO.mostrar("Contenido Java generado para " + c.getNombre() + ":\n" + contenido);
+            String nombreArchivo = c.getNombre() + ".java";
+            boolean exito = organizador.guardarArchivo(nombreArchivo, contenido);
+            if (exito) {
+                interfaceIO.mostrar("Archivo Java guardado en " + nombreArchivo);
+            } else {
+                interfaceIO.mostrar("Error al guardar Java");
+            }
+        }
+
+        if (!modelo.getClases().isEmpty()) {
+            Clase primeraClase = modelo.getClases().get(0);
+            String contenidoMain = generadorJava.generarMain(primeraClase);
+            String nombreArchivoMain = "Main.java";
+            boolean exitoMain = organizador.guardarArchivo(nombreArchivoMain, contenidoMain);
+            if (exitoMain) {
+                interfaceIO.mostrar("Archivo Main.java guardado correctamente");
+            } else {
+                interfaceIO.mostrar("Error al guardar Main.java");
+            }
         }
     }
-
-    if (!modelo.getClases().isEmpty()) {
-        Clase primeraClase = modelo.getClases().get(0);
-        String contenidoMain = generadorJava.generarMain(primeraClase);
-        String nombreArchivoMain = "Main.java";
-        boolean exitoMain = organizador.guardarArchivo(nombreArchivoMain, contenidoMain);
-        if (exitoMain) {
-            interfaceIO.mostrar("Archivo Main.java guardado correctamente");
-        } else {
-            interfaceIO.mostrar("Error al guardar Main.java");
-        }
-    }
-}
 
     private String seleccionarTipo() {
         String tipo = "";
@@ -232,12 +232,20 @@ public class Control {
 
     private String seleccionarVisibilidad() {
         String vis = "";
+
         while (true) {
             String opcion = interfaceIO.leer("Seleccione visibilidad:" +
                                 "\n1. publico" +
                                 "\n2. privado" +
                                 "\n3. protegido" +
-                                "\n\nEscribe el número de opción:");
+                                "\n(Presione ENTER para usar 'publico' por defecto):");
+
+            // Si el usuario no escribe nada → por defecto es "publico"
+            if (opcion == null || opcion.trim().isEmpty()) {
+                vis = "publico";
+                break;
+            }
+
             if (opcion.equals("1")) {
                 vis = "publico";
                 break;
@@ -251,6 +259,8 @@ public class Control {
                 interfaceIO.mostrar("Opción inválida. Intente de nuevo.");
             }
         }
+
         return vis;
     }
 }
+

@@ -1,28 +1,36 @@
 package generadoruml;
-//
+
 public class GeneradorUML {
+
     public String organizarUML(Modelo modelo) {
-        String texto = "@startuml\n";
+        StringBuilder texto = new StringBuilder("@startuml\n");
 
         for (Clase c : modelo.getClases()) {
-            texto += "class " + c.getNombre() + " {\n";
+            texto.append("class ").append(c.getNombre()).append(" {\n");
             for (Atributo a : c.getAtributos()) {
-                texto += " " + vis(a.getVisibilidad()) + " " + a.getNombre() + " : " + a.getTipo() + "\n";
+                texto.append(" ").append(vis(a.getVisibilidad()))
+                     .append(" ").append(a.getNombre())
+                     .append(" : ").append(a.getTipo()).append("\n");
             }
             for (Metodo m : c.getMetodos()) {
-                texto += " " + vis(m.getVisibilidad()) + " " + m.getNombre() + "() : " + m.getTipo() + "\n";
+                texto.append(" ").append(vis(m.getVisibilidad()))
+                     .append(" ").append(m.getNombre())
+                     .append("() : ").append(m.getTipo()).append("\n");
             }
-            texto += "}\n";
+            texto.append("}\n");
         }
+
         for (Relacion r : modelo.getRelaciones()) {
             String f = "..>";
             if (r.getTipo().equalsIgnoreCase("es un")) f = "<|--";
             if (r.getTipo().equalsIgnoreCase("posee")) f = "--";
-            if (r.getTipo().equalsIgnoreCase("usa")) f = "..>";
-            texto += r.getOrigen() + " " + f + " " + r.getDestino() + " : " + r.getTipo() + "\n";
+            texto.append(r.getOrigen()).append(" ").append(f)
+                 .append(" ").append(r.getDestino())
+                 .append(" : ").append(r.getTipo()).append("\n");
         }
-        texto += "@enduml";
-        return texto;
+
+        texto.append("@enduml");
+        return texto.toString();
     }
 
     private String vis(String v) {
@@ -35,3 +43,4 @@ public class GeneradorUML {
         }
     }
 }
+

@@ -2,35 +2,44 @@ package generadoruml;
 
 public class GeneradorJava {
 
-    // Genera el código de la clase UML
     public String organizarJava(Clase c) {
-        String codigo = "public class " + c.getNombre() + " {\n";
+        StringBuilder codigo = new StringBuilder();
+        codigo.append("public class ").append(c.getNombre()).append(" {\n");
+
         for (Atributo a : c.getAtributos()) {
-            codigo += "    " + visibilidad(a.getVisibilidad()) + " " + a.getTipo() + " " + a.getNombre() + ";\n";
+            codigo.append("    ")
+                  .append(visibilidad(a.getVisibilidad())).append(" ")
+                  .append(a.getTipo()).append(" ")
+                  .append(a.getNombre()).append(";\n");
         }
+
         for (Metodo m : c.getMetodos()) {
-            codigo += "    " + visibilidad(m.getVisibilidad()) + " " + m.getTipo() + " " + m.getNombre() + "() {\n    }\n";
+            codigo.append("    ")
+                  .append(visibilidad(m.getVisibilidad())).append(" ")
+                  .append(m.getTipo()).append(" ")
+                  .append(m.getNombre()).append("() {}\n");
         }
-        codigo += "}\n";
-        return codigo;
+
+        codigo.append("}\n");
+        return codigo.toString();
     }
 
-    // Genera el código de Main.java por separado
     public String generarMain(Clase c) {
-    String main = "public class Main {\n"
-            + "    public static void main(String[] args) {\n"
-            + "        " + c.getNombre() + " obj = new " + c.getNombre() + "();\n"
-            + "        System.out.println(\"Clase " + c.getNombre() + " creada correctamente.\");\n"
-            + "    }\n"
-            + "}\n";
-    return main;
-}
+        return "public class Main {\n"
+             + "    public static void main(String[] args) {\n"
+             + "        " + c.getNombre() + " obj = new " + c.getNombre() + "();\n"
+             + "        System.out.println(\"Clase " + c.getNombre() + " creada correctamente.\");\n"
+             + "    }\n"
+             + "}";
+    }
 
-    private String visibilidad(String visibilidad) {
-        visibilidad = visibilidad.toLowerCase();
-        if (visibilidad.contains("privado")) return "private";
-        if (visibilidad.contains("protegido")) return "protected";
-        if (visibilidad.contains("publico")) return "public";
-        return "public";
+    private String visibilidad(String vis) {
+        if (vis == null) return "public";
+        switch (vis.toLowerCase()) {
+            case "privado": return "private";
+            case "protegido": return "protected";
+            case "publico": return "public";
+            default: return "public";
+        }
     }
 }

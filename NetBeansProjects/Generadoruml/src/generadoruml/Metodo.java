@@ -11,16 +11,7 @@ public class Metodo {
         this.visibilidad = visibilidad;
     }
 
-    public String getNombre() {
-        return nombre;
-    }
-
-    public String getTipo() {
-        return tipo;
-    }
-
-    public String getVisibilidad() {
-        return visibilidad;
-    }
+    public String getNombre() { return nombre; }
+    public String getTipo() { return tipo; }
+    public String getVisibilidad() { return visibilidad; }
 }
-
