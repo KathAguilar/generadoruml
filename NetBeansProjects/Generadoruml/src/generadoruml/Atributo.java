@@ -1,4 +1,3 @@
-
 package generadoruml;
  
 public class Atributo {
@@ -36,3 +35,4 @@ public class Atributo {
         this.visibilidad = visibilidad;
     }
 }
+
