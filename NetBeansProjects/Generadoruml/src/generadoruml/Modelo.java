@@ -1,27 +1,26 @@
 package generadoruml;
-import java.util.List;
-import java.util.ArrayList;
 
-public class Modelo {
-private List<Clase> clases; 
-private List<Relacion> relaciones;
+public class Metodo {
+    private final String nombre;
+    private final String tipo;
+    private final String visibilidad;
 
-public Modelo(){
-    this.clases = new ArrayList<>();
-    this.relaciones = new ArrayList<>();
-    
-}
-public void crearClase(Clase clase){
-    clases.add(clase);
-}
-public void crearRelacion (Relacion relacion){
-  relaciones.add(relacion);
-}
-    public List<Clase> getClases() {
-        return clases;
+    public Metodo(String nombre, String tipo, String visibilidad) {
+        this.nombre = nombre;
+        this.tipo = tipo;
+        this.visibilidad = visibilidad;
     }
 
-    public List<Relacion> getRelaciones() {
-        return relaciones;
+    public String getNombre() {
+        return nombre;
+    }
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public String getVisibilidad() {
+        return visibilidad;
     }
 }
+
