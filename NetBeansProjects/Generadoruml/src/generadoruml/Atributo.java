@@ -36,3 +36,15 @@ public class Atributo {
     }
 }
 
+
+    }
+
+    public String getVisibilidad() {
+        return visibilidad;
+    }
+
+    public void setVisibilidad(String visibilidad) {
+        this.visibilidad = visibilidad;
+    }
+}
+
