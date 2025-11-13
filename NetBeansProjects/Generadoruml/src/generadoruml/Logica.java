@@ -17,5 +17,3 @@ public class Logica {
         return generadorJava.organizarJava(c);
     }
 }
-
-
