@@ -1,5 +1,4 @@
 package generadoruml;
-//
 public class GeneradorJava {
     public String organizarJava(Clase c) {
         String codigo = "public class " + c.getNombre() + " {\n";
@@ -21,8 +20,4 @@ public class GeneradorJava {
         return "public";
     }
 }
-
-
-
-
 
